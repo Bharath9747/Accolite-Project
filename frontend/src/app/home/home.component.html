@@ -1,0 +1,40 @@
+<label for="readme">Upload README.md:</label>
+<input
+  type="file"
+  name="readme"
+  id="readme"
+  accept=".md"
+  (change)="onFileChange($event, 'readme')"
+/>
+<br />
+
+<label for="zip1">Upload Java Template + Testcase :</label>
+<input
+  type="file"
+  name="zip1"
+  id="zip1"
+  accept=".zip"
+  (change)="onFileChange($event, 'java')"
+/>
+<br />
+
+<label for="zip2">Upload Cpp Template + Testcase :</label>
+<input
+  type="file"
+  name="zip2"
+  id="zip2"
+  accept=".zip"
+  (change)="onFileChange($event, 'cpp')"
+/>
+<br />
+
+<label for="zip3">Upload Python Template + Testcase :</label>
+<input
+  type="file"
+  name="zip3"
+  id="zip3"
+  accept=".zip"
+  (change)="onFileChange($event, 'python')"
+/>
+<br />
+<button (click)="onUpload()">Upload Files</button>

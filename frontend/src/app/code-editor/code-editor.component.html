@@ -1,0 +1,11 @@
+<select (change)="changeCode()" [(ngModel)]="selectedLanguage">
+  <option *ngFor="let language of languages" value="{{ language }}">
+    {{ language }}
+  </option>
+</select>
+<button (click)="displayQuestion()">Read Me</button>
+<ngx-monaco-editor
+  class="editor"
+  [options]="editorOptions"
+  [(ngModel)]="code"
+></ngx-monaco-editor>
