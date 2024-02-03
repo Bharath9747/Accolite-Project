@@ -54,8 +54,6 @@ export class CodeEditorComponent implements OnInit {
     if (this.question.description) {
       this.code = this.question.description;
     }
-    console.log(this.editorOptions);
-
     this.selectedLanguage = '';
   }
   changeCode() {
