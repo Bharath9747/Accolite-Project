@@ -45,7 +45,7 @@ public class ConverterService {
         questionDTO.setTemplates(templates);
         return questionDTO;
     }
-    private String readFile(String filepath){
+    public String readFile(String filepath){
         StringBuilder content=new StringBuilder();
         try (FileReader reader = new FileReader(filepath)) {
             int character;

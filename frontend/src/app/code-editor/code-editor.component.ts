@@ -39,7 +39,7 @@ export class CodeEditorComponent implements OnInit {
   };
   code: string = '';
   constructor(private questionService: QuestionService) {}
-  displayQuestion() {
+  displayDesc() {
     this.editorOptions.language = 'markdown';
 
     if (this.question.description) {
@@ -58,5 +58,17 @@ export class CodeEditorComponent implements OnInit {
         break;
       }
     }
+  }
+  runCode() {
+    this.questionService
+      .runCode({ code: this.code, language: this.selectedLanguage })
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
   }
 }
