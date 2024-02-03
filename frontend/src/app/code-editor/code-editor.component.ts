@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { QuestionService } from '../services/question.service';
 import { Question } from '../model/question.model.';
 import { Template } from '../model/template.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-code-editor',
@@ -12,9 +13,13 @@ export class CodeEditorComponent implements OnInit {
   question!: Question;
   templates: Template[] = [];
   languages: string[] = [];
+  id!: number;
   selectedLanguage: string = 'Cpp';
   ngOnInit(): void {
-    this.questionService.getQuestion(1).subscribe({
+    this.router.queryParams.subscribe((params) => {
+      this.id = params['id'];
+    });
+    this.questionService.getQuestion(this.id).subscribe({
       next: (response) => {
         this.question = response;
         if (this.question.templates) {
@@ -38,7 +43,10 @@ export class CodeEditorComponent implements OnInit {
     minimap: { enabled: false },
   };
   code: string = '';
-  constructor(private questionService: QuestionService) {}
+  constructor(
+    private questionService: QuestionService,
+    private router: ActivatedRoute
+  ) {}
   displayDesc() {
     this.editorOptions.language = 'markdown';
 
@@ -61,7 +69,11 @@ export class CodeEditorComponent implements OnInit {
   }
   runCode() {
     this.questionService
-      .runCode({ code: this.code, language: this.selectedLanguage })
+      .runCode({
+        id: this.id,
+        code: this.code,
+        language: this.selectedLanguage,
+      })
       .subscribe({
         next: (response) => {
           console.log(response);

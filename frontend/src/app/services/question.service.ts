@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Question } from '../model/question.model.';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Template } from '../model/template.model';
+import { Code } from '../model/code.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +16,10 @@ export class QuestionService {
     const params = new HttpParams().set('id', id);
     return this.http.get<Question>(`${this.api}/question`, { params });
   }
-  runCode(template: Template): Observable<string[]> {
+  runCode(code: Code): Observable<string[]> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const options = { headers: headers };
 
-    return this.http.post<string[]>(`${this.api}/run`, template, options);
+    return this.http.post<string[]>(`${this.api}/run`, code, options);
   }
 }

@@ -1,5 +1,6 @@
 package com.accolite.app.controller;
 
+import com.accolite.app.dto.CodeDTO;
 import com.accolite.app.dto.QuestionDTO;
 import com.accolite.app.dto.TemplateDTO;
 import com.accolite.app.entity.Question;
@@ -33,14 +34,16 @@ public class QuestionController {
     }
 
     @PostMapping("/run")
-    public List<String> getResult(@RequestBody TemplateDTO dto) throws IOException, InterruptedException {
+    public List<String> getResult(@RequestBody CodeDTO dto) throws IOException, InterruptedException {
+        String BASE_PATH="C:\\Users\\bharath.m\\Desktop\\Accolite-Project\\ExtractedQuestions\\Question"+dto.getId()+"\\";
+
         if(dto.getLanguage().equals("Java"))
-            return compilerService.compileAndrunJava(dto.getCode());
+            return compilerService.compileAndrunJava(BASE_PATH,dto.getCode());
         if(dto.getLanguage().equals("Cpp"))
             return compilerService.compileAndrunCpp
-                    (dto.getCode());
+                    (BASE_PATH,dto.getCode());
         if(dto.getLanguage().equals("Python"))
-           return  compilerService.runPython(dto.getCode());
+           return  compilerService.runPython(BASE_PATH,dto.getCode());
         return null;
     }
 

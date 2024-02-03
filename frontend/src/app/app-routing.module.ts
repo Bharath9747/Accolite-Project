@@ -13,6 +13,10 @@ const routes: Routes = [
     path: 'editor',
     component: CodeEditorComponent,
   },
+  {
+    path: 'editor/:id',
+    component: CodeEditorComponent,
+  },
 ];
 
 @NgModule({

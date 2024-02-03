@@ -1,13 +1,22 @@
 #include <bits/stdc++.h>
 using namespace std;
-int addDigits(int num) {
-	if(num == 0) return 0;
-        else if(num % 9 == 0) return 9;
-        else return num % 9;
+int longestPalindrome(string s) {
+	int oddCount = 0;
+        unordered_map<char, int> ump;
+        for(char ch : s) {
+            ump[ch]++;
+            if (ump[ch] % 2 == 1)
+                oddCount++;
+            else    
+                oddCount--;
+        }
+        if (oddCount > 1)
+            return s.length() - oddCount + 1;
+        return s.length();
 }
 int main()
 {
-	int n;
-	cin>>n;
-	cout<<addDigits(n);
+	string s;
+	cin>>s;
+	cout<<longestPalindrome(s);
 }

@@ -19,9 +19,8 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class CompilerService {
     private final ConverterService converterService;
-    String BASE_PATH="C:\\Users\\bharath.m\\Desktop\\Accolite-Project\\ExtractedQuestions\\Question1\\";
 
-    public List<String> compileAndrunJava(String code) {
+    public List<String> compileAndrunJava( String BASE_PATH,String code) {
         List<String> result = new ArrayList<>();
         if(compile(code))
         {
@@ -49,6 +48,7 @@ public class CompilerService {
                     }
                 }
             }
+
             int size = input.size();
             for (int i=0;i<size;i++)
             {
@@ -56,14 +56,14 @@ public class CompilerService {
 
                 String generatedClassName = extractClassName(code);
                 String[] in = input.get(i).split(" ");
-                res.append(" Actual Output : ").append(runCompiledClass(generatedClassName, in));
+                res.append(" Actual Output : ").append(runCompiledClass(generatedClassName, in)).replace(res.length()-2,res.length(),"");
                 result.add(res.toString());
             }
         }
         return result;
     }
 
-    public List<String> runPython(String code) {
+    public List<String> runPython(String BASE_PATH,String code) {
         List<String> result = new ArrayList<>();
         try {
             String folderPath = BASE_PATH+"Python";
@@ -71,7 +71,6 @@ public class CompilerService {
             List<String> input = new ArrayList<>();
             List<String> output = new ArrayList<>();
             if (folder.exists() && folder.isDirectory()) {
-                // Get the list of files in the folder
                 File[] files = folder.listFiles();
 
                 if (files != null) {
@@ -126,7 +125,7 @@ public class CompilerService {
         }
     }
 
-    public List<String> compileAndrunCpp(String code) throws IOException, InterruptedException {
+    public List<String> compileAndrunCpp(String BASE_PATH,String code) throws IOException, InterruptedException {
         List<String> result = new ArrayList<>();
         String folderPath = BASE_PATH+"Cpp";
         File folder = new File(folderPath);

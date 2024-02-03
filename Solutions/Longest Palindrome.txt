@@ -1,0 +1,63 @@
+public class Solution {
+    public static int longestPalindrome(String s) {
+        int[] count = new int[128];
+        for (char c: s.toCharArray())
+            count[c]++;
+
+      
+        int oddCount = -1;
+        for (int v: count) {
+            if (v % 2 != 0) oddCount++;
+        }
+      
+        return (oddCount > 0) ? s.length() - oddCount: s.length();
+    }
+	public static void main(String ar[])
+	{
+		System.out.println(longestPalindrome(ar[0]));
+	}
+}
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+int longestPalindrome(string s) {
+	int oddCount = 0;
+        unordered_map<char, int> ump;
+        for(char ch : s) {
+            ump[ch]++;
+            if (ump[ch] % 2 == 1)
+                oddCount++;
+            else    
+                oddCount--;
+        }
+        if (oddCount > 1)
+            return s.length() - oddCount + 1;
+        return s.length();
+}
+int main()
+{
+	string s;
+	cin>>s;
+	cout<<longestPalindrome(s);
+}
+
+
+def longestPalindrome(s: str) -> int:
+    	odd_count = 0
+        d = {}
+        for ch in s:
+            if ch in d:
+                d[ch] += 1
+            else:
+                d[ch] = 1
+            if d[ch] % 2 == 1:
+                odd_count += 1
+            else:
+                odd_count -= 1
+        if odd_count > 1:
+            return len(s) - odd_count + 1
+        return len(s)    
+
+print(longestPalindrome(input()))
