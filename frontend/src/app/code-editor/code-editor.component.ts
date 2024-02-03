@@ -41,6 +41,7 @@ export class CodeEditorComponent implements OnInit {
     theme: 'vs-dark',
     language: 'cpp',
     minimap: { enabled: false },
+    wordWrap: true,
   };
   code: string = '';
   constructor(
