@@ -1,14 +1,16 @@
-Given a string s which consists of lowercase or uppercase letters, return the length of the longest palindrome that can be built with those letters. Letters are case sensitive, for example, "Aa" is not considered a palindrome here.
+Given an integer num, repeatedly add all its digits until the result has only one digit, and return it.
 
 Example 1:
 
-aba
-3
+38
+2
 
 Explaination : 
-	aba is a palindrome. Therefore the longest palindrome length is 3
+	3+8=11
+	1+1=2
+	Therefore 2 is the final answer.
 
 Example 2:
 
-racecar
-7
+123
+6

@@ -1,4 +1,4 @@
-def longestPalindrome(s: str) -> int:
+def addDigits(num: int) -> int:
     #Write Code here    
 
-print(longestPalindrome(input()))
+print(addDigits(int(input())))

@@ -1,8 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { QuestionService } from '../services/question.service';
 import { Question } from '../model/question.model.';
 import { Template } from '../model/template.model';
 import { ActivatedRoute } from '@angular/router';
+import { ExplorerItem } from '../model/explorer-item.model';
+import { ExplorerService } from '../services/explorer.service';
 
 @Component({
   selector: 'app-code-editor',
@@ -10,29 +12,24 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './code-editor.component.scss',
 })
 export class CodeEditorComponent implements OnInit {
-  question!: Question;
-  templates: Template[] = [];
-  languages: string[] = [];
+  fileNames: ExplorerItem[] = [];
+  explorerData: ExplorerItem[] = [];
+  selectedLanguage: string = '';
   id!: number;
-  selectedLanguage: string = 'Cpp';
   ngOnInit(): void {
     this.router.queryParams.subscribe((params) => {
       this.id = params['id'];
     });
-    this.questionService.getQuestion(this.id).subscribe({
-      next: (response) => {
-        this.question = response;
-        if (this.question.templates) {
-          this.templates = this.question.templates;
-          this.changeCode();
-          for (let index = 0; index < this.templates.length; index++) {
-            const element = this.templates[index];
-            this.languages.push(element.language);
-          }
+    this.explorerService.getExplorerData(this.id).subscribe({
+      next: (data) => {
+        this.explorerData = data;
+        for (let index = 0; index < this.explorerData.length; index++) {
+          const element = this.explorerData[index];
+          if (!element.children) this.handleItemClick(element);
         }
       },
       error: (error) => {
-        console.log(error);
+        console.error('Error fetching explorer data:', error);
       },
     });
   }
@@ -40,32 +37,18 @@ export class CodeEditorComponent implements OnInit {
   editorOptions = {
     theme: 'vs-dark',
     language: 'cpp',
+    fontSize: 18,
     minimap: { enabled: false },
     wordWrap: true,
+    readOnly: true,
   };
   code: string = '';
   constructor(
     private questionService: QuestionService,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private explorerService: ExplorerService
   ) {}
-  displayDesc() {
-    this.editorOptions.language = 'markdown';
-
-    if (this.question.description) {
-      this.code = this.question.description;
-    }
-    this.selectedLanguage = '';
-  }
-  changeCode() {
-    for (let index = 0; index < this.templates.length; index++) {
-      const element = this.templates[index];
-      if (element.language === this.selectedLanguage) {
-        this.editorOptions.language = this.selectedLanguage.toLowerCase();
-        this.code = element.code;
-        break;
-      }
-    }
-  }
+  changeCode() {}
   runCode() {
     this.questionService
       .runCode({
@@ -81,5 +64,56 @@ export class CodeEditorComponent implements OnInit {
           console.log(error);
         },
       });
+  }
+  handleItemClick(item: ExplorerItem) {
+    if (item.type === 'file') {
+      this.explorerService.getFileContent(item.absolutePath).subscribe({
+        next: (data) => {
+          if (
+            item.name.includes('.cpp') ||
+            item.name.includes('.java') ||
+            item.name.includes('.py')
+          ) {
+            this.selectedLanguage = this.getLanguageFromFileName(item.name);
+            this.editorOptions = {
+              theme: 'vs-dark',
+              language: this.selectedLanguage.toLowerCase(),
+              fontSize: 18,
+              minimap: { enabled: false },
+              wordWrap: true,
+              readOnly: false,
+            };
+          } else if (item.name.includes('.md')) {
+            this.selectedLanguage = 'markdown';
+            this.editorOptions = {
+              theme: 'vs-dark',
+              language: this.selectedLanguage,
+              fontSize: 18,
+              minimap: { enabled: false },
+              wordWrap: true,
+              readOnly: true,
+            };
+          }
+
+          this.code = data.content;
+        },
+        error: (error) => {
+          console.error('Error fetching file content:', error);
+        },
+      });
+    } else {
+      item.expanded = !item.expanded;
+    }
+  }
+  getLanguageFromFileName(fileName: string): string {
+    if (fileName.includes('.cpp')) {
+      return 'Cpp';
+    } else if (fileName.includes('.java')) {
+      return 'Java';
+    } else if (fileName.includes('.py')) {
+      return 'Python';
+    } else {
+      return '';
+    }
   }
 }

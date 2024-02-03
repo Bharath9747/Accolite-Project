@@ -5,8 +5,9 @@ Example 1:
 aba
 3
 
-Explaination : 
-	aba is a palindrome. Therefore the longest palindrome length is 3
+# Explaination :
+
+aba is a palindrome. Therefore the longest palindrome length is 3
 
 Example 2:
 

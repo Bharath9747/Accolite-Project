@@ -1,12 +1,24 @@
-<select (change)="changeCode()" [(ngModel)]="selectedLanguage">
-  <option *ngFor="let language of languages" value="{{ language }}">
-    {{ language }}
-  </option>
-</select>
-<button (click)="displayDesc()">Read Me</button>
-<button (click)="runCode()">Run</button>
-<ngx-monaco-editor
-  class="editor"
-  [options]="editorOptions"
-  [(ngModel)]="code"
-></ngx-monaco-editor>
+<div class="code-container">
+  <div class="explorer-section">
+    <ul>
+      <li *ngFor="let item of explorerData; let i = index">
+        <span (click)="handleItemClick(item)">
+          {{ item.name }}
+        </span>
+        <ul *ngIf="item.children && item.children[0] && item.expanded">
+          <li>
+            <span (click)="handleItemClick(item.children[0])">
+              {{ item.children[0].name }}
+            </span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <ngx-monaco-editor
+    class="editor"
+    [options]="editorOptions"
+    [(ngModel)]="code"
+  ></ngx-monaco-editor>
+</div>

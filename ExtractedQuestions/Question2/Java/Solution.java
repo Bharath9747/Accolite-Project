@@ -1,9 +1,10 @@
 public class Solution {
-    public static int longestPalindrome(String s) {
-     //Write COde here
+    public static int addDigits(int num) {
+        //Write Code here
+		
     }
 	public static void main(String ar[])
 	{
-		System.out.println(longestPalindrome(ar[0]));
+		System.out.print(addDigits(Integer.parseInt(ar[0])));
 	}
 }

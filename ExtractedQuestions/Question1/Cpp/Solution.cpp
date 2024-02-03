@@ -1,11 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
-int addDigits(int num) {
-	//Write Code here
+int longestPalindrome(string s) {
+	//Write Code Here
 }
 int main()
 {
-	int n;
-	cin>>n;
-	cout<<addDigits(n);
+	string s;
+	cin>>s;
+	cout<<longestPalindrome(s);
 }
