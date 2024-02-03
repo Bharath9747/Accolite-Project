@@ -53,7 +53,7 @@ export class CodeEditorComponent implements OnInit {
     for (let index = 0; index < this.templates.length; index++) {
       const element = this.templates[index];
       if (element.language === this.selectedLanguage) {
-        this.editorOptions.language = this.selectedLanguage;
+        this.editorOptions.language = this.selectedLanguage.toLowerCase();
         this.code = element.code;
         break;
       }

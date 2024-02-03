@@ -27,23 +27,14 @@ public class FileUploadController {
 
     @PostMapping("/upload")
     public ResponseEntity<Map<String, String>> handleFileUpload(
-            @RequestParam("readme") MultipartFile readmeFile,
-            @RequestParam("java") MultipartFile javaZip,
-            @RequestParam("cpp") MultipartFile cppZip,
-            @RequestParam("python") MultipartFile pythonZip
+            @RequestParam("question") MultipartFile questionZip
     ) {
         try {
             Question question = new Question();
-            question.setReadmeFile(readmeFile.getBytes());
-            question.setJava(javaZip.getBytes());
-            question.setCpp(cppZip.getBytes());
-            question.setPython(pythonZip.getBytes());
+            question.setQuestionZip(questionZip.getBytes());
             question = questionRepository.save(question);
             Long id = question.getId();
-            extracterService.createReadmeFile(id, question.getReadmeFile());
-            extracterService.extractZipToFolder(id, question.getJava());
-            extracterService.extractZipToFolder(id, question.getCpp());
-            extracterService.extractZipToFolder(id, question.getPython());
+            extracterService.extractZipToFolder(id, question.getQuestionZip());
             Map<String, String> map = new HashMap<>();
             map.put("result", "Files uploaded successfully!");
             return ResponseEntity.ok(map);

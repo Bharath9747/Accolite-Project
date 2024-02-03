@@ -27,6 +27,9 @@ public class ExtracterService {
             ZipEntry zipEntry;
             while ((zipEntry = zipInputStream.getNextEntry()) != null) {
                 String entryName = zipEntry.getName();
+                if (entryName.contains("/")) {
+                    entryName = entryName.substring(entryName.indexOf('/') + 1);
+                }
                 File entryFile = new File(destinationFolder + File.separator + entryName);
 
                 if (zipEntry.isDirectory()) {
@@ -43,19 +46,6 @@ public class ExtracterService {
 
                 zipInputStream.closeEntry();
             }
-        }
-    }
-    public void createReadmeFile(Long id,byte[] readmeBlob) throws IOException {
-        String readmeContent = new String(readmeBlob, StandardCharsets.UTF_8);
-        String destinationFolderPath = BASE_PATH+"Question"+id+"\\";
-        File destinationFolder = new File(destinationFolderPath);
-        if (!destinationFolder.exists()) {
-            destinationFolder.mkdirs();
-        }
-
-        File readmeFile = new File(destinationFolder, "Readme.md");
-        try (FileOutputStream fileOutputStream = new FileOutputStream(readmeFile)) {
-            fileOutputStream.write(readmeContent.getBytes(StandardCharsets.UTF_8));
         }
     }
 }

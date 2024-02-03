@@ -17,14 +17,7 @@ public class Question {
     private Long id;
 
     @Column(columnDefinition = "BLOB")
-    private byte[] readmeFile;
+    private byte[] questionZip;
 
-    @Column(columnDefinition = "BLOB")
-    private byte[] java;
 
-    @Column(columnDefinition = "BLOB")
-    private byte[] cpp;
-
-    @Column(columnDefinition = "BLOB")
-    private byte[] python;
 }
