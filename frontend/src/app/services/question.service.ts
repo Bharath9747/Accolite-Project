@@ -25,25 +25,25 @@ export class QuestionService {
 
     return this.http.post<string[]>(`${this.api}/run`, code, options);
   }
-  uploadData(
-    file: File,
+  uploadData(formData: FormData): Observable<string[]> {
+    return this.http.post<string[]>(`${this.api}/candidate/upload`, formData);
+  }
+  assignQuestion(
+    emails: string[],
     selectedQuestion: Question[]
   ): Observable<{ [key: string]: string }> {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    // Append each selected question to the formData
-    for (const question of selectedQuestion) {
-      formData.append('selectedQuestions', JSON.stringify(question));
-    }
-
-    const headers = new HttpHeaders(); // Let Angular set the content type automatically
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const options = { headers: headers };
-
+    const request = { candidates: emails, questions: selectedQuestion };
     return this.http.post<{ [key: string]: string }>(
-      `${this.api}/assign`,
-      formData,
+      `${this.api}/question/assign`,
+      request,
       options
     );
+  }
+  getQuestionByEmail(email: string): Observable<Question[]> {
+    const formData = new FormData();
+    formData.append('email', email);
+    return this.http.post<Question[]>(`${this.api}/test`, formData);
   }
 }

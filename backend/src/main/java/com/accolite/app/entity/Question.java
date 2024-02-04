@@ -18,6 +18,7 @@ public class Question {
     private Long id;
     @Column(columnDefinition = "BLOB")
     private byte[] compressedData;
+    @Column(unique = true)
     private String title;
 
     private String type;

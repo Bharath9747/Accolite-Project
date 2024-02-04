@@ -44,9 +44,20 @@ export class AssignQuestionComponent implements OnInit {
   onFileChange(event: any): void {
     const file = event.target.files[0];
     if (this.selectedQuestions.length != 0) {
-      this.questionService.uploadData(file, this.selectedQuestions).subscribe({
+      const formData = new FormData();
+      formData.append('file', file);
+      this.questionService.uploadData(formData).subscribe({
         next: (response) => {
-          alert(response);
+          this.questionService
+            .assignQuestion(response, this.selectedQuestions)
+            .subscribe({
+              next: (response) => {
+                alert(response['result']);
+              },
+              error: (err) => {
+                console.log(err);
+              },
+            });
         },
         error: (error) => {
           console.log(error);

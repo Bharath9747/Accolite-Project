@@ -9,9 +9,10 @@ import { HomeComponent } from './home/home.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
 import { AssignQuestionComponent } from './assign-question/assign-question.component';
+import { TestComponent } from './test/test.component';
 
 @NgModule({
-  declarations: [AppComponent, CodeEditorComponent, HomeComponent, AssignQuestionComponent],
+  declarations: [AppComponent, CodeEditorComponent, HomeComponent, AssignQuestionComponent, TestComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
