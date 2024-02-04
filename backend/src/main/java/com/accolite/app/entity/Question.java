@@ -5,19 +5,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
-
 @Entity
-
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(columnDefinition = "BLOB")
-    private byte[] questionZip;
+    private byte[] compressedData;
+    private String title;
 
-
+    private String type;
+    @ManyToMany(mappedBy = "questions")
+    List<Candidate> candidates = new ArrayList<>();
 }

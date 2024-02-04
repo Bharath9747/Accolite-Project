@@ -5,6 +5,7 @@ package com.accolite.app.controller;
 import com.accolite.app.entity.Question;
 import com.accolite.app.repo.QuestionRepository;
 import com.accolite.app.service.ExtracterService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,19 +25,23 @@ public class FileUploadController {
     @Autowired
     QuestionRepository questionRepository;
 
-
     @PostMapping("/upload")
+    @Transactional
     public ResponseEntity<Map<String, String>> handleFileUpload(
-            @RequestParam("question") MultipartFile questionZip
+            @RequestParam("file") MultipartFile compressedData,
+            @RequestParam("type") String type,
+            @RequestParam("title") String title
     ) {
         try {
             Question question = new Question();
-            question.setQuestionZip(questionZip.getBytes());
+            question.setCompressedData(compressedData.getBytes());
+            question.setTitle(title);
+            question.setType(type);
             question = questionRepository.save(question);
             Long id = question.getId();
-            extracterService.extractZipToFolder(id, question.getQuestionZip());
+            extracterService.extractZipToFolder(id, question.getCompressedData());
             Map<String, String> map = new HashMap<>();
-            map.put("result", "Files uploaded successfully!");
+            map.put("result", type + " Question uploaded successfully!");
             return ResponseEntity.ok(map);
         } catch (Exception e) {
             Map<String, String> map = new HashMap<>();

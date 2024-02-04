@@ -1,6 +1,8 @@
 package com.accolite.app.controller;// ExplorerController.java
 
 import com.accolite.app.dto.ExplorerItem;
+import com.accolite.app.service.ConverterService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,14 +14,16 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class ExplorerController {
+    private final ConverterService converterService;
     @GetMapping("/explorer")
     public ResponseEntity<List<ExplorerItem>> getExplorerData(@RequestParam Long id) {
         // Replace this with the path to your local directory
         String directoryPath = "C:\\Users\\bharath.m\\Desktop\\Accolite-Project\\ExtractedQuestions\\Question" + id;
 
-        List<ExplorerItem> explorerData = fetchDataFromDirectory(new File(directoryPath));
+        List<ExplorerItem> explorerData = converterService.fetchDataFromDirectory(new File(directoryPath));
 
         return ResponseEntity.ok(explorerData);
     }
@@ -41,28 +45,5 @@ public class ExplorerController {
         }
     }
 
-    private List<ExplorerItem> fetchDataFromDirectory(File directory) {
-        File[] files = directory.listFiles();
 
-        if (files == null) {
-            return null;
-        }
-
-        return Arrays.stream(files)
-                .map(file -> {
-                    if (file.isDirectory()) {
-                        List<ExplorerItem> subItems = fetchDataFromDirectory(file);
-                        return new ExplorerItem(file.getName(), "folder", file.getAbsolutePath(), subItems);
-                    } else {
-                        if ((file.getName().equals("Readme.md")||file.getName().equals("Solution.java") || file.getName().equals("Solution.cpp")|| file.getName().equals("Solution.py"))) {
-                            return new ExplorerItem(file.getName(), "file", file.getAbsolutePath());
-                        } else {
-                            return null; // or return Collections.emptyList();
-                        }
-                    }
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-
-    }
 }

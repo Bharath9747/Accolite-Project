@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { HomeComponent } from './home/home.component';
+import { AssignQuestionComponent } from './assign-question/assign-question.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,10 @@ const routes: Routes = [
   {
     path: 'editor',
     component: CodeEditorComponent,
+  },
+  {
+    path: 'assign',
+    component: AssignQuestionComponent,
   },
   {
     path: 'editor/:id',

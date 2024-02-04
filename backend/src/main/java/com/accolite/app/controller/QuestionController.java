@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -30,7 +31,17 @@ public class QuestionController {
         Question question = questionRepository.findById(id).orElse(null);
         if (question == null)
             return null;
-        return converterService.convertQuestionToDTO(id);
+        return converterService.convertQuestionToDTO(question);
+    }
+    @GetMapping("/question/all")
+    public List<QuestionDTO> getAllQuestion() {
+        List<Question> question = questionRepository.findAll();
+
+        List<QuestionDTO> questionDTOS = new ArrayList<>();
+        question.forEach(
+                question1 -> questionDTOS.add(converterService.convertQuestionToDTO(question1))
+        );
+        return questionDTOS;
     }
 
     @PostMapping("/run")

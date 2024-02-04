@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class QuestionDTO {
-    private String description;
-    private List<TemplateDTO> templates;
+    private String title;
+    private List<ExplorerItem> paths;
+    private String type;
 }

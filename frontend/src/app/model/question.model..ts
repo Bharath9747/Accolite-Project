@@ -1,6 +1,7 @@
-import { Template } from './template.model';
+import { ExplorerItem } from './explorer-item.model';
 
 export interface Question {
-  description?: string;
-  templates?: Template[];
+  title: string;
+  paths: ExplorerItem[];
+  type: string;
 }

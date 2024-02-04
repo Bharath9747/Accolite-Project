@@ -1,7 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { QuestionService } from '../services/question.service';
-import { Question } from '../model/question.model.';
-import { Template } from '../model/template.model';
 import { ActivatedRoute } from '@angular/router';
 import { ExplorerItem } from '../model/explorer-item.model';
 import { ExplorerService } from '../services/explorer.service';
