@@ -5,12 +5,18 @@ import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { HomeComponent } from './home/home.component';
 import { AssignQuestionComponent } from './assign-question/assign-question.component';
 import { TestComponent } from './test/test.component';
+import { DummyComponent } from './dummy/dummy.component';
 
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
   },
+  {
+    path: 'dummy',
+    component: DummyComponent,
+  },
+
   {
     path: 'editor',
     component: CodeEditorComponent,

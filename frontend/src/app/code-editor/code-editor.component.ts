@@ -1,9 +1,19 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { QuestionService } from '../services/question.service';
 import { ActivatedRoute } from '@angular/router';
 import { ExplorerItem } from '../model/explorer-item.model';
 import { ExplorerService } from '../services/explorer.service';
-
+import { Remarkable } from 'remarkable';
+import { SharedService } from '../services/shared.service';
 @Component({
   selector: 'app-code-editor',
   templateUrl: './code-editor.component.html',
@@ -14,6 +24,8 @@ export class CodeEditorComponent implements OnInit {
   explorerData: ExplorerItem[] = [];
   selectedLanguage: string = '';
   id!: number;
+  type: string = '';
+
   ngOnInit(): void {
     this.router.queryParams.subscribe((params) => {
       this.id = params['id'];
@@ -21,9 +33,12 @@ export class CodeEditorComponent implements OnInit {
     this.explorerService.getExplorerData(this.id).subscribe({
       next: (data) => {
         this.explorerData = data;
+        if (this.explorerData.length === 2) this.type = 'DB';
+        else this.type = 'CD';
         for (let index = 0; index < this.explorerData.length; index++) {
           const element = this.explorerData[index];
-          if (!element.children) this.handleItemClick(element);
+          if (!element.children && element.name.includes('.md'))
+            this.handleItemClick(element);
         }
       },
       error: (error) => {
@@ -31,21 +46,25 @@ export class CodeEditorComponent implements OnInit {
       },
     });
   }
+  code: string = '';
 
   editorOptions = {
     theme: 'vs-dark',
     language: 'cpp',
     fontSize: 18,
     minimap: { enabled: false },
+    scrollBeyondLastLine: false,
     wordWrap: true,
-    readOnly: true,
+    readOnly: false,
+    automaticLayout: true,
   };
-  code: string = '';
   constructor(
     private questionService: QuestionService,
     private router: ActivatedRoute,
-    private explorerService: ExplorerService
+    private explorerService: ExplorerService,
+    private sharedService: SharedService
   ) {}
+
   changeCode() {}
   runCode() {
     this.questionService
@@ -67,10 +86,13 @@ export class CodeEditorComponent implements OnInit {
     if (item.type === 'file') {
       this.explorerService.getFileContent(item.absolutePath).subscribe({
         next: (data) => {
+          this.code = data.content;
+
           if (
             item.name.includes('.cpp') ||
             item.name.includes('.java') ||
-            item.name.includes('.py')
+            item.name.includes('.py') ||
+            item.name.includes('.sql')
           ) {
             this.selectedLanguage = this.getLanguageFromFileName(item.name);
             this.editorOptions = {
@@ -78,22 +100,15 @@ export class CodeEditorComponent implements OnInit {
               language: this.selectedLanguage.toLowerCase(),
               fontSize: 18,
               minimap: { enabled: false },
+              scrollBeyondLastLine: false,
               wordWrap: true,
               readOnly: false,
+              automaticLayout: true,
             };
           } else if (item.name.includes('.md')) {
             this.selectedLanguage = 'markdown';
-            this.editorOptions = {
-              theme: 'vs-dark',
-              language: this.selectedLanguage,
-              fontSize: 18,
-              minimap: { enabled: false },
-              wordWrap: true,
-              readOnly: true,
-            };
+            this.sharedService.setData(this.code);
           }
-
-          this.code = data.content;
         },
         error: (error) => {
           console.error('Error fetching file content:', error);

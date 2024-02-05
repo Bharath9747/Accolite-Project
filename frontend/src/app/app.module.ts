@@ -10,13 +10,24 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
 import { AssignQuestionComponent } from './assign-question/assign-question.component';
 import { TestComponent } from './test/test.component';
+import { DummyComponent } from './dummy/dummy.component';
+import { MarkdownComponent } from './markdown/markdown.component';
 
 @NgModule({
-  declarations: [AppComponent, CodeEditorComponent, HomeComponent, AssignQuestionComponent, TestComponent],
+  declarations: [
+    AppComponent,
+    CodeEditorComponent,
+    HomeComponent,
+    AssignQuestionComponent,
+    TestComponent,
+    DummyComponent,
+    MarkdownComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+
     FormsModule,
     MonacoEditorModule.forRoot(),
   ],
