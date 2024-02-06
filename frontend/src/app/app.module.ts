@@ -27,7 +27,6 @@ import { MarkdownComponent } from './markdown/markdown.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-
     FormsModule,
     MonacoEditorModule.forRoot(),
   ],

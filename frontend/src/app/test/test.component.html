@@ -12,7 +12,14 @@
     </button>
   </div>
   <div class="code-container">
-    <div class="explorer-section" *ngIf="type == 'CD'">
+    <div class="button-g">
+      <button (click)="onClose()" class="button">{{ status }}</button>
+      <button (click)="runCode()" class="button">run</button>
+      <button (click)="onCloseConsole()" class="button">
+        {{ statusConsole }}
+      </button>
+    </div>
+    <div class="explorer-section" *ngIf="type == 'CD' && hideNav">
       <ul>
         <li *ngFor="let item of explorerData; let i = index">
           <span (click)="handleItemClick(item)">
@@ -30,15 +37,16 @@
         </li>
       </ul>
     </div>
-    <div class="explorer-section" *ngIf="type == 'DB'">
+    <div class="explorer-section" *ngIf="type == 'DB' && hideNav">
       <div *ngFor="let item of explorerData; let i = index">
         <span (click)="handleItemClick(item)">
           {{ item.name }}
         </span>
       </div>
     </div>
+
     <app-markdown
-      class="editor editor-markdown"
+      class="editor-markdown"
       *ngIf="selectedLanguage == 'markdown'"
     ></app-markdown>
     <ngx-monaco-editor
@@ -47,5 +55,7 @@
       [(ngModel)]="code"
       *ngIf="selectedLanguage != 'markdown'"
     ></ngx-monaco-editor>
+
+    <div class="console" *ngIf="hideConsole"></div>
   </div>
 </section>

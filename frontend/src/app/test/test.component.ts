@@ -21,6 +21,19 @@ export class TestComponent {
   email: string = '';
   questions: Question[] = [];
   code: string = '';
+  hideNav = true;
+  hideConsole = false;
+  status: string = 'close';
+  statusConsole: string = 'open';
+
+  onClose() {
+    this.hideNav = !this.hideNav;
+    this.status = this.hideNav ? 'close' : 'open';
+  }
+  onCloseConsole() {
+    this.hideConsole = !this.hideConsole;
+    this.statusConsole = this.hideConsole ? 'close' : 'open';
+  }
 
   editorOptions = {
     theme: 'vs-dark',
@@ -40,13 +53,13 @@ export class TestComponent {
 
   onChange(index: number) {
     let question: Question = this.questions[index];
+    this.hideNav = true;
+    this.status = 'close';
     if (question.id) this.id = question.id;
     this.explorerService
       .getExplorerData(this.id, 'Test', this.email)
       .subscribe({
         next: (data) => {
-          console.log(data);
-
           this.explorerData = data;
           if (this.explorerData.length === 2) this.type = 'DB';
           else this.type = 'CD';
