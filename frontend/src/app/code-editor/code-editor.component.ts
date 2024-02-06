@@ -35,6 +35,7 @@ export class CodeEditorComponent implements OnInit {
         this.explorerData = data;
         if (this.explorerData.length === 2) this.type = 'DB';
         else this.type = 'CD';
+
         for (let index = 0; index < this.explorerData.length; index++) {
           const element = this.explorerData[index];
           if (!element.children && element.name.includes('.md'))
@@ -92,7 +93,8 @@ export class CodeEditorComponent implements OnInit {
             item.name.includes('.cpp') ||
             item.name.includes('.java') ||
             item.name.includes('.py') ||
-            item.name.includes('.sql')
+            item.name.includes('.sql') ||
+            item.name.includes('.txt')
           ) {
             this.selectedLanguage = this.getLanguageFromFileName(item.name);
             this.editorOptions = {

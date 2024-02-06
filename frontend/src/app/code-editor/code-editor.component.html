@@ -5,13 +5,15 @@
         <span (click)="handleItemClick(item)">
           {{ item.name }}
         </span>
-        <ul *ngIf="item.children && item.children[0] && item.expanded">
-          <li>
-            <span (click)="handleItemClick(item.children[0])">
-              {{ item.children[0].name }}
-            </span>
-          </li>
-        </ul>
+        <div *ngIf="item.children && item.children[0] && item.expanded">
+          <ul *ngFor="let children of item.children">
+            <li>
+              <span (click)="handleItemClick(children)">
+                {{ children.name }}
+              </span>
+            </li>
+          </ul>
+        </div>
       </li>
     </ul>
   </div>

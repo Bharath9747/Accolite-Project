@@ -1,8 +1,11 @@
 package com.accolite.app.controller;// ExplorerController.java
 
 import com.accolite.app.dto.ExplorerItem;
+import com.accolite.app.entity.Question;
+import com.accolite.app.repo.QuestionRepository;
 import com.accolite.app.service.ConverterService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,11 +21,16 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "http://localhost:4200")
 public class ExplorerController {
     private final ConverterService converterService;
+    @Autowired
+    QuestionRepository questionRepository;
     @GetMapping("/explorer")
     public ResponseEntity<List<ExplorerItem>> getExplorerData(@RequestParam Long id) {
-        // Replace this with the path to your local directory
-        String directoryPath = "C:\\Users\\bharath.m\\Desktop\\Accolite-Project\\ExtractedQuestions\\Question" + id;
-
+        Question question = questionRepository.findById(id).orElse(null);
+        if(question==null)
+            return ResponseEntity.status(500).body(null);
+        String type = question.getType();
+        String title = question.getTitle();
+        String directoryPath = "C:\\Users\\bharath.m\\Desktop\\Accolite-Project\\ExtractedQuestions\\"+type+"\\"+title;
         List<ExplorerItem> explorerData = converterService.fetchDataFromDirectory(new File(directoryPath));
 
         return ResponseEntity.ok(explorerData);

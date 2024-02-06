@@ -9,16 +9,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class ConverterService {
-    String BASE_PATH = "C:\\Users\\bharath.m\\Desktop\\Accolite-Project\\ExtractedQuestions\\Question";
+    String BASE_PATH = "C:\\Users\\bharath.m\\Desktop\\Accolite-Project\\";
 
     public QuestionDTO convertQuestionToDTO(Question question) {
         QuestionDTO questionDTO = new QuestionDTO();
-        String folderPath = BASE_PATH + question.getId();
+        String folderPath = BASE_PATH +"ExtractedQuestions\\"+question.getType()+"\\"+question.getTitle()+"\\";
 
         questionDTO.setTitle(question.getTitle());
         questionDTO.setType(question.getType());
@@ -54,18 +53,10 @@ public class ConverterService {
                         List<ExplorerItem> subItems = fetchDataFromDirectory(file);
                         return new ExplorerItem(file.getName(), "folder", file.getAbsolutePath(), subItems);
                     } else {
-                        if ((file.getName().equals("README.md") ||
-                                file.getName().equals("Solution.java") ||
-                                file.getName().equals("Solution.cpp") ||
-                                file.getName().equals("Solution.py") ||
-                                file.getName().equals("Solution.sql"))) {
-                            return new ExplorerItem(file.getName(), "file", file.getAbsolutePath());
-                        } else {
-                            return null; // or return Collections.emptyList();
-                        }
+                        return new ExplorerItem(file.getName(), "file", file.getAbsolutePath());
                     }
                 })
-                .filter(Objects::nonNull)
+
                 .collect(Collectors.toList());
 
     }

@@ -9,6 +9,7 @@ import com.accolite.app.repo.CandidateRepository;
 import com.accolite.app.repo.QuestionRepository;
 import com.accolite.app.service.CompilerService;
 import com.accolite.app.service.ConverterService;
+import com.accolite.app.service.ExtracterService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;
@@ -33,6 +34,7 @@ import java.util.Map;
 public class QuestionController {
     private final ConverterService converterService;
     private final CompilerService compilerService;
+    private final ExtracterService extracterService;
 
     @Autowired
     QuestionRepository questionRepository;
@@ -95,10 +97,22 @@ public class QuestionController {
             );
             candidateDTO.getCandidates().forEach(
                     candidate->{
+
                         Candidate candidate1 = new Candidate();
                         candidate1.setEmail(candidate);
                         candidate1.setQuestions(questions);
-                        candidateRepository.save(candidate1);
+                        candidate1 = candidateRepository.save(candidate1);
+                        Long id = candidate1.getId();
+                        questions.forEach(
+                                question -> {
+                                    try {
+                                        extracterService.extractZipForCandidate(id,question);
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                        );
+
                     }
             );
             Map<String, String> map = new HashMap<>();
@@ -111,9 +125,16 @@ public class QuestionController {
         }
     }
 
+
     @PostMapping("/run")
     public List<String> getResult(@RequestBody CodeDTO dto) throws IOException, InterruptedException {
-        String BASE_PATH = "C:\\Users\\bharath.m\\Desktop\\Accolite-Project\\ExtractedQuestions\\Question" + dto.getId() + "\\";
+        Question question = questionRepository.findById(dto.getId()).orElse(null);
+        if(question==null)
+            return null;
+        String type = question.getType();
+        String title = question.getTitle();
+
+        String BASE_PATH = "C:\\Users\\bharath.m\\Desktop\\Accolite-Project\\ExtractedQuestions\\" + type + "\\"+title;
 
         if (dto.getLanguage().equals("Java"))
             return compilerService.compileAndrunJava(BASE_PATH, dto.getCode());
