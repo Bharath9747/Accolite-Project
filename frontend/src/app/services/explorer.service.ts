@@ -11,10 +11,19 @@ export class ExplorerService {
 
   constructor(private http: HttpClient) {}
 
-  getExplorerData(id: number): Observable<ExplorerItem[]> {
-    const params = new HttpParams().set('id', id);
+  getExplorerData(
+    id: number,
+    type: string,
+    email: string
+  ): Observable<ExplorerItem[]> {
+    if (type === 'Admin') {
+      const params = new HttpParams().set('id', id);
 
-    return this.http.get<ExplorerItem[]>(this.apiUrl, { params });
+      return this.http.get<ExplorerItem[]>(this.apiUrl, { params });
+    } else {
+      const params = new HttpParams().set('id', id).set('email', email);
+      return this.http.get<ExplorerItem[]>(`${this.apiUrl}/test`, { params });
+    }
   }
   getFileContent(absolutePath: string): Observable<{ content: string }> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');

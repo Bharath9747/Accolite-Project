@@ -30,7 +30,8 @@ export class CodeEditorComponent implements OnInit {
     this.router.queryParams.subscribe((params) => {
       this.id = params['id'];
     });
-    this.explorerService.getExplorerData(this.id).subscribe({
+
+    this.explorerService.getExplorerData(this.id, 'Admin', '').subscribe({
       next: (data) => {
         this.explorerData = data;
         if (this.explorerData.length === 2) this.type = 'DB';

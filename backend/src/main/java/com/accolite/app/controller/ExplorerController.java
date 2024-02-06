@@ -1,7 +1,9 @@
 package com.accolite.app.controller;// ExplorerController.java
 
 import com.accolite.app.dto.ExplorerItem;
+import com.accolite.app.entity.Candidate;
 import com.accolite.app.entity.Question;
+import com.accolite.app.repo.CandidateRepository;
 import com.accolite.app.repo.QuestionRepository;
 import com.accolite.app.service.ConverterService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,8 @@ public class ExplorerController {
     private final ConverterService converterService;
     @Autowired
     QuestionRepository questionRepository;
+    @Autowired
+    CandidateRepository candidateRepository;
     @GetMapping("/explorer")
     public ResponseEntity<List<ExplorerItem>> getExplorerData(@RequestParam Long id) {
         Question question = questionRepository.findById(id).orElse(null);
@@ -31,6 +35,19 @@ public class ExplorerController {
         String type = question.getType();
         String title = question.getTitle();
         String directoryPath = "C:\\Users\\bharath.m\\Desktop\\Accolite-Project\\ExtractedQuestions\\"+type+"\\"+title;
+        List<ExplorerItem> explorerData = converterService.fetchDataFromDirectory(new File(directoryPath));
+
+        return ResponseEntity.ok(explorerData);
+    }
+    @GetMapping("/explorer/test")
+    public ResponseEntity<List<ExplorerItem>> getCandidate(@RequestParam Long id,@RequestParam String email) {
+        Candidate candidate = candidateRepository.findByEmail(email);
+        Question question = questionRepository.findById(id).orElse(null);
+        if(question==null)
+            return ResponseEntity.status(500).body(null);
+        String type = question.getType();
+        String title = question.getTitle();
+        String directoryPath = "C:\\Users\\bharath.m\\Desktop\\Accolite-Project\\Test\\Candidate"+candidate.getId()+"\\"+type+"\\"+title;
         List<ExplorerItem> explorerData = converterService.fetchDataFromDirectory(new File(directoryPath));
 
         return ResponseEntity.ok(explorerData);

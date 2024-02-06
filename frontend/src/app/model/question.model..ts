@@ -4,4 +4,5 @@ export interface Question {
   title: string;
   paths: ExplorerItem[];
   type: string;
+  id?: number;
 }

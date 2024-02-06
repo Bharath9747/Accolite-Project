@@ -18,7 +18,7 @@ public class ConverterService {
     public QuestionDTO convertQuestionToDTO(Question question) {
         QuestionDTO questionDTO = new QuestionDTO();
         String folderPath = BASE_PATH +"ExtractedQuestions\\"+question.getType()+"\\"+question.getTitle()+"\\";
-
+        questionDTO.setId(question.getId());
         questionDTO.setTitle(question.getTitle());
         questionDTO.setType(question.getType());
         questionDTO.setPaths(fetchDataFromDirectory(new File(folderPath)));
@@ -53,6 +53,7 @@ public class ConverterService {
                         List<ExplorerItem> subItems = fetchDataFromDirectory(file);
                         return new ExplorerItem(file.getName(), "folder", file.getAbsolutePath(), subItems);
                     } else {
+
                         return new ExplorerItem(file.getName(), "file", file.getAbsolutePath());
                     }
                 })

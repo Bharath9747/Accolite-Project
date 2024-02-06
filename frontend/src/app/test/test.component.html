@@ -3,9 +3,49 @@
   <button type="button" (click)="onStart()">Start</button>
 </section>
 <section *ngIf="!hideArea">
-  <div *ngFor="let question of questions; let i = index">
-    <button>
+  <div class="button-group">
+    <button
+      *ngFor="let question of questions; let i = index"
+      (click)="onChange(i)"
+    >
       {{ i + 1 }}
     </button>
+  </div>
+  <div class="code-container">
+    <div class="explorer-section" *ngIf="type == 'CD'">
+      <ul>
+        <li *ngFor="let item of explorerData; let i = index">
+          <span (click)="handleItemClick(item)">
+            {{ item.name }}
+          </span>
+          <div *ngIf="item.children && item.children[0] && item.expanded">
+            <ul *ngFor="let children of item.children">
+              <li>
+                <span (click)="handleItemClick(children)">
+                  {{ children.name }}
+                </span>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="explorer-section" *ngIf="type == 'DB'">
+      <div *ngFor="let item of explorerData; let i = index">
+        <span (click)="handleItemClick(item)">
+          {{ item.name }}
+        </span>
+      </div>
+    </div>
+    <app-markdown
+      class="editor editor-markdown"
+      *ngIf="selectedLanguage == 'markdown'"
+    ></app-markdown>
+    <ngx-monaco-editor
+      class="editor"
+      [options]="editorOptions"
+      [(ngModel)]="code"
+      *ngIf="selectedLanguage != 'markdown'"
+    ></ngx-monaco-editor>
   </div>
 </section>
