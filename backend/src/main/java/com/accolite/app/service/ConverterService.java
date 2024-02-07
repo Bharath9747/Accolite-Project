@@ -17,9 +17,9 @@ public class ConverterService {
 
     public QuestionDTO convertQuestionToDTO(Question question) {
         QuestionDTO questionDTO = new QuestionDTO();
-        String folderPath = BASE_PATH +"ExtractedQuestions\\"+question.getType()+"\\"+question.getTitle()+"\\";
+        String folderPath = BASE_PATH +"ExtractedQuestions\\"+question.getType()+"\\"+question.getName()+"\\";
         questionDTO.setId(question.getId());
-        questionDTO.setTitle(question.getTitle());
+        questionDTO.setTitle(question.getName());
         questionDTO.setType(question.getType());
         questionDTO.setPaths(fetchDataFromDirectory(new File(folderPath)));
 

@@ -46,9 +46,9 @@ public class ExtracterService {
     }
 
     public void extractZipForCandidate(Long id, Question question)throws IOException  {
-        byte[] questionFolder = question.getCompressedData();
+        byte[] questionFolder = question.getZip();
         String type = question.getType();
-        String title = question.getTitle();
+        String title = question.getName();
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(questionFolder);
              ZipInputStream zipInputStream = new ZipInputStream(byteArrayInputStream)) {
             String destinationFolder = BASE_PATH+"Test\\Candidate"+id+"\\"+type+"\\"+title+"\\";

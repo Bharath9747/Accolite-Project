@@ -17,11 +17,12 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(columnDefinition = "BLOB")
-    private byte[] compressedData;
+    private byte[] zip;
     @Column(unique = true)
-    private String title;
-
+    private String name;
     private String type;
-    @ManyToMany(mappedBy = "questions")
-    List<Candidate> candidates = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(name = "question_test", joinColumns = @JoinColumn(name = "question_id"))
+    @Column(name = "test_id")
+    private List<Long> tests;
 }

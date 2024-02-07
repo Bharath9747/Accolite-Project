@@ -34,12 +34,11 @@ public class FileUploadController {
     ) {
         try {
             Question question = new Question();
-            question.setCompressedData(compressedData.getBytes());
-            question.setTitle(title);
+            question.setZip(compressedData.getBytes());
+            question.setName(title);
             question.setType(type);
             question = questionRepository.save(question);
-            Long id = question.getId();
-            extracterService.extractZipToFolder(title,type, question.getCompressedData());
+            extracterService.extractZipToFolder(title, type, question.getZip());
             Map<String, String> map = new HashMap<>();
             map.put("result", type + " Question uploaded successfully!");
             return ResponseEntity.ok(map);

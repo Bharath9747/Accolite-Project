@@ -6,6 +6,7 @@ import { HomeComponent } from './home/home.component';
 import { AssignQuestionComponent } from './assign-question/assign-question.component';
 import { TestComponent } from './test/test.component';
 import { DummyComponent } from './dummy/dummy.component';
+import { CreateTestComponent } from './create-test/create-test.component';
 
 const routes: Routes = [
   {
@@ -13,8 +14,8 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: 'dummy',
-    component: DummyComponent,
+    path: 'create-test',
+    component: CreateTestComponent,
   },
 
   {

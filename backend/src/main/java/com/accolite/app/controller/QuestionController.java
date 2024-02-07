@@ -5,8 +5,10 @@ import com.accolite.app.dto.CodeDTO;
 import com.accolite.app.dto.QuestionDTO;
 import com.accolite.app.entity.Candidate;
 import com.accolite.app.entity.Question;
+import com.accolite.app.entity.Test;
 import com.accolite.app.repo.CandidateRepository;
 import com.accolite.app.repo.QuestionRepository;
+import com.accolite.app.repo.TestRepository;
 import com.accolite.app.service.CompilerService;
 import com.accolite.app.service.ConverterService;
 import com.accolite.app.service.ExtracterService;
@@ -40,6 +42,8 @@ public class QuestionController {
     QuestionRepository questionRepository;
     @Autowired
     CandidateRepository candidateRepository;
+    @Autowired
+    TestRepository testRepository;
 
     @GetMapping("/question")
     public QuestionDTO getQuestion(@RequestParam Long id) {
@@ -91,7 +95,7 @@ public class QuestionController {
             candidateDTO.getQuestions().forEach(
                     question -> {
                         questions.add(
-                                questionRepository.findByTitle(question.getTitle())
+                                questionRepository.findByName(question.getTitle())
                         );
                     }
             );
@@ -100,7 +104,7 @@ public class QuestionController {
 
                         Candidate candidate1 = new Candidate();
                         candidate1.setEmail(candidate);
-                        candidate1.setQuestions(questions);
+//                        candidate1.setQuestions(questions);
                         candidate1 = candidateRepository.save(candidate1);
                         Long id = candidate1.getId();
                         questions.forEach(
@@ -132,7 +136,7 @@ public class QuestionController {
         if(question==null)
             return null;
         String type = question.getType();
-        String title = question.getTitle();
+        String title = question.getName();
 
         String BASE_PATH = "C:\\Users\\bharath.m\\Desktop\\Accolite-Project\\ExtractedQuestions\\" + type + "\\"+title;
 
@@ -148,13 +152,37 @@ public class QuestionController {
     @PostMapping("/test")
     public List<QuestionDTO> startTest(@RequestParam String email){
 
-        List<Question> question = candidateRepository.findByEmail(email).getQuestions();
+//        List<Question> question = candidateRepository.findByEmail(email).getQuestions();
 
         List<QuestionDTO> questionDTOS = new ArrayList<>();
-        question.forEach(
-                question1 -> questionDTOS.add(converterService.convertQuestionToDTO(question1))
-        );
+//        question.forEach(
+//                question1 -> questionDTOS.add(converterService.convertQuestionToDTO(question1))
+//        );
         return questionDTOS;
+    }
+    @PostMapping("/create/test")
+    @Transactional
+    public ResponseEntity<Map<String, String>> createTest(
+            @RequestBody List<QuestionDTO> questions
+    ) {
+        try{
+        Test test = new Test();
+        List<Long> ids = new ArrayList<>();
+        questions.forEach(
+                questionDTO -> {
+                    ids.add(questionRepository.findByName(questionDTO.getTitle()).getId());
+                }
+        );
+        test.setQuestions(ids);
+        testRepository.save(test);
+            Map<String, String> map = new HashMap<>();
+            map.put("result", " Test Created successfully!");
+            return ResponseEntity.ok(map);
+        } catch (Exception e) {
+            Map<String, String> map = new HashMap<>();
+            map.put("result", e.getMessage());
+            return ResponseEntity.status(500).body(map);
+        }
     }
 
 }

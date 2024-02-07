@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import javax.swing.text.html.Option;
 
 public interface QuestionRepository extends JpaRepository<Question,Long> {
-    Question findByTitle(String title);
+    Question findByName(String name);
 }

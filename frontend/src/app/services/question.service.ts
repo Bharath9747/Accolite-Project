@@ -46,4 +46,16 @@ export class QuestionService {
     formData.append('email', email);
     return this.http.post<Question[]>(`${this.api}/test`, formData);
   }
+  createTest(
+    selectedQuestion: Question[]
+  ): Observable<{ [key: string]: string }> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    const options = { headers: headers };
+
+    return this.http.post<{ [key: string]: string }>(
+      `${this.api}/create/test`,
+      selectedQuestion,
+      options
+    );
+  }
 }

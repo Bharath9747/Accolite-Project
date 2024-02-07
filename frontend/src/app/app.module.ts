@@ -12,6 +12,7 @@ import { AssignQuestionComponent } from './assign-question/assign-question.compo
 import { TestComponent } from './test/test.component';
 import { DummyComponent } from './dummy/dummy.component';
 import { MarkdownComponent } from './markdown/markdown.component';
+import { CreateTestComponent } from './create-test/create-test.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { MarkdownComponent } from './markdown/markdown.component';
     TestComponent,
     DummyComponent,
     MarkdownComponent,
+    CreateTestComponent,
   ],
   imports: [
     BrowserModule,

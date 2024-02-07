@@ -1,0 +1,21 @@
+<table (click)="onTableRowSelect($event)">
+  <thead>
+    <tr>
+      <th>Index</th>
+      <th>Title</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let question of questions; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ question.title }}</td>
+      <td>{{ question.type }}</td>
+    </tr>
+  </tbody>
+</table>
+Questions
+<ul *ngFor="let question of selectedQuestions">
+  <li>{{ question.title }}</li>
+</ul>
+<button (click)="onSubmit()">Create</button>
