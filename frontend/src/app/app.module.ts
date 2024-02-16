@@ -8,22 +8,24 @@ import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { HomeComponent } from './home/home.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
-import { AssignQuestionComponent } from './assign-question/assign-question.component';
+
 import { TestComponent } from './test/test.component';
 import { DummyComponent } from './dummy/dummy.component';
 import { MarkdownComponent } from './markdown/markdown.component';
 import { CreateTestComponent } from './create-test/create-test.component';
+import { AssignTestComponent } from './assign-test/assign-test.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CodeEditorComponent,
     HomeComponent,
-    AssignQuestionComponent,
+
     TestComponent,
     DummyComponent,
     MarkdownComponent,
     CreateTestComponent,
+    AssignTestComponent,
   ],
   imports: [
     BrowserModule,

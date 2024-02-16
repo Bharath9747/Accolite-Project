@@ -100,7 +100,7 @@ public class QuestionController {
                     }
             );
             candidateDTO.getCandidates().forEach(
-                    candidate->{
+                    candidate -> {
 
                         Candidate candidate1 = new Candidate();
                         candidate1.setEmail(candidate);
@@ -110,7 +110,7 @@ public class QuestionController {
                         questions.forEach(
                                 question -> {
                                     try {
-                                        extracterService.extractZipForCandidate(id,question);
+                                        extracterService.extractZipForCandidate(id, question);
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
@@ -133,12 +133,12 @@ public class QuestionController {
     @PostMapping("/run")
     public List<String> getResult(@RequestBody CodeDTO dto) throws IOException, InterruptedException {
         Question question = questionRepository.findById(dto.getId()).orElse(null);
-        if(question==null)
+        if (question == null)
             return null;
         String type = question.getType();
         String title = question.getName();
 
-        String BASE_PATH = "C:\\Users\\bharath.m\\Desktop\\Accolite-Project\\ExtractedQuestions\\" + type + "\\"+title;
+        String BASE_PATH = "C:\\Users\\bharath.m\\Desktop\\Accolite-Project\\ExtractedQuestions\\" + type + "\\" + title;
 
         if (dto.getLanguage().equals("Java"))
             return compilerService.compileAndrunJava(BASE_PATH, dto.getCode());
@@ -149,8 +149,9 @@ public class QuestionController {
             return compilerService.runPython(BASE_PATH, dto.getCode());
         return null;
     }
+
     @PostMapping("/test")
-    public List<QuestionDTO> startTest(@RequestParam String email){
+    public List<QuestionDTO> startTest(@RequestParam String email) {
 
 //        List<Question> question = candidateRepository.findByEmail(email).getQuestions();
 
@@ -160,21 +161,43 @@ public class QuestionController {
 //        );
         return questionDTOS;
     }
+
     @PostMapping("/create/test")
     @Transactional
     public ResponseEntity<Map<String, String>> createTest(
             @RequestBody List<QuestionDTO> questions
     ) {
-        try{
-        Test test = new Test();
-        List<Long> ids = new ArrayList<>();
-        questions.forEach(
-                questionDTO -> {
-                    ids.add(questionRepository.findByName(questionDTO.getTitle()).getId());
-                }
-        );
-        test.setQuestions(ids);
-        testRepository.save(test);
+        try {
+            Test test = new Test();
+            List<Question> list = new ArrayList<>();
+            List<Long> ids = new ArrayList<>();
+            questions.forEach(
+                    questionDTO -> {
+                        Question question = questionRepository.findByName(questionDTO.getTitle());
+
+                        ids.add(question.getId());
+                        list.add(question);
+                    }
+            );
+
+            test.setQuestions(ids);
+            test = testRepository.save(test);
+            Test finalTest = test;
+            list.forEach(
+                    question -> {
+                        if (question.getTests() == null) {
+                            List<Long> temp = new ArrayList<>();
+                            temp.add(finalTest.getId());
+                            question.setTests(temp);
+                            questionRepository.save(question);
+                        } else {
+                            List<Long> temp = question.getTests();
+                            temp.add(finalTest.getId());
+                            question.setTests(temp);
+                            questionRepository.save(question);
+                        }
+                    }
+            );
             Map<String, String> map = new HashMap<>();
             map.put("result", " Test Created successfully!");
             return ResponseEntity.ok(map);

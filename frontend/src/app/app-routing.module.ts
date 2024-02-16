@@ -3,10 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { HomeComponent } from './home/home.component';
-import { AssignQuestionComponent } from './assign-question/assign-question.component';
 import { TestComponent } from './test/test.component';
 import { DummyComponent } from './dummy/dummy.component';
 import { CreateTestComponent } from './create-test/create-test.component';
+import { AssignTestComponent } from './assign-test/assign-test.component';
 
 const routes: Routes = [
   {
@@ -29,7 +29,7 @@ const routes: Routes = [
 
   {
     path: 'assign',
-    component: AssignQuestionComponent,
+    component: AssignTestComponent,
   },
   {
     path: 'editor/:id',
